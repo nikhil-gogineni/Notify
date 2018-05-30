@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c187b1f63a3f423494bc1c14f832fa51" Name="Diagram1">
+        <EntityTypeShape EntityType="NotifyModel.tblDepartment" Width="1.5" PointX="0.75" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="NotifyModel.tblEmployee" Width="1.5" PointX="3" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="NotifyModel.tblEmployeeMessage" Width="1.5" PointX="5.25" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="NotifyModel.tblMessage" Width="1.5" PointX="3" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="NotifyModel.tblMessageMedia" Width="1.5" PointX="5.25" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="NotifyModel.tblPriority" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="NotifyModel.FK_tblMessage_tblDepartment" ManuallyRouted="false" />
+        <AssociationConnector Association="NotifyModel.FK_tblEmployeeMessage_tblEmployee" ManuallyRouted="false" />
+        <AssociationConnector Association="NotifyModel.FK_tblEmployeeMessage_tblMessage" ManuallyRouted="false" />
+        <AssociationConnector Association="NotifyModel.FK_tblMessage_tblPriority" ManuallyRouted="false" />
+        <AssociationConnector Association="NotifyModel.FK_tblMessageMedia_tblMessage" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

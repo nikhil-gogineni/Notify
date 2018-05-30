@@ -1,0 +1,398 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="NotifyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblDepartment">
+          <Key>
+            <PropertyRef Name="tblDepartmentID" />
+          </Key>
+          <Property Name="tblDepartmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LabelColor" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Initial" Type="varchar" MaxLength="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblEmployee">
+          <Key>
+            <PropertyRef Name="tblEmployeeID" />
+          </Key>
+          <Property Name="tblEmployeeID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblEmployeeMessage">
+          <Key>
+            <PropertyRef Name="tblMessageID" />
+            <PropertyRef Name="tblEmployeeID" />
+          </Key>
+          <Property Name="tblMessageID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="tblEmployeeID" Type="bigint" Nullable="false" />
+          <Property Name="IsRead" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblMessage">
+          <Key>
+            <PropertyRef Name="tblMessageID" />
+          </Key>
+          <Property Name="tblMessageID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Subject" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedAt" Type="datetime" Nullable="false" />
+          <Property Name="tblDepartmentID" Type="int" Nullable="false" />
+          <Property Name="tblPriorityID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblMessageMedia">
+          <Key>
+            <PropertyRef Name="tblMessageMediaID" />
+          </Key>
+          <Property Name="tblMessageMediaID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tblMessageID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Path" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="tblMediaType" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblPriority">
+          <Key>
+            <PropertyRef Name="tblPriorityID" />
+          </Key>
+          <Property Name="tblPriorityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Color" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_tblEmployeeMessage_tblEmployee">
+          <End Role="tblEmployee" Type="Self.tblEmployee" Multiplicity="1" />
+          <End Role="tblEmployeeMessage" Type="Self.tblEmployeeMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmployee">
+              <PropertyRef Name="tblEmployeeID" />
+            </Principal>
+            <Dependent Role="tblEmployeeMessage">
+              <PropertyRef Name="tblEmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblEmployeeMessage_tblMessage">
+          <End Role="tblMessage" Type="Self.tblMessage" Multiplicity="1" />
+          <End Role="tblEmployeeMessage" Type="Self.tblEmployeeMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMessage">
+              <PropertyRef Name="tblMessageID" />
+            </Principal>
+            <Dependent Role="tblEmployeeMessage">
+              <PropertyRef Name="tblMessageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMessage_tblDepartment">
+          <End Role="tblDepartment" Type="Self.tblDepartment" Multiplicity="1" />
+          <End Role="tblMessage" Type="Self.tblMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDepartment">
+              <PropertyRef Name="tblDepartmentID" />
+            </Principal>
+            <Dependent Role="tblMessage">
+              <PropertyRef Name="tblDepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMessage_tblPriority">
+          <End Role="tblPriority" Type="Self.tblPriority" Multiplicity="1" />
+          <End Role="tblMessage" Type="Self.tblMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPriority">
+              <PropertyRef Name="tblPriorityID" />
+            </Principal>
+            <Dependent Role="tblMessage">
+              <PropertyRef Name="tblPriorityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMessageMedia_tblMessage">
+          <End Role="tblMessage" Type="Self.tblMessage" Multiplicity="1" />
+          <End Role="tblMessageMedia" Type="Self.tblMessageMedia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMessage">
+              <PropertyRef Name="tblMessageID" />
+            </Principal>
+            <Dependent Role="tblMessageMedia">
+              <PropertyRef Name="tblMessageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NotifyModelStoreContainer">
+          <EntitySet Name="tblDepartment" EntityType="Self.tblDepartment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblEmployee" EntityType="Self.tblEmployee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblEmployeeMessage" EntityType="Self.tblEmployeeMessage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblMessage" EntityType="Self.tblMessage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblMessageMedia" EntityType="Self.tblMessageMedia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPriority" EntityType="Self.tblPriority" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblEmployeeMessage_tblEmployee" Association="Self.FK_tblEmployeeMessage_tblEmployee">
+            <End Role="tblEmployee" EntitySet="tblEmployee" />
+            <End Role="tblEmployeeMessage" EntitySet="tblEmployeeMessage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblEmployeeMessage_tblMessage" Association="Self.FK_tblEmployeeMessage_tblMessage">
+            <End Role="tblMessage" EntitySet="tblMessage" />
+            <End Role="tblEmployeeMessage" EntitySet="tblEmployeeMessage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMessage_tblDepartment" Association="Self.FK_tblMessage_tblDepartment">
+            <End Role="tblDepartment" EntitySet="tblDepartment" />
+            <End Role="tblMessage" EntitySet="tblMessage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMessage_tblPriority" Association="Self.FK_tblMessage_tblPriority">
+            <End Role="tblPriority" EntitySet="tblPriority" />
+            <End Role="tblMessage" EntitySet="tblMessage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMessageMedia_tblMessage" Association="Self.FK_tblMessageMedia_tblMessage">
+            <End Role="tblMessage" EntitySet="tblMessage" />
+            <End Role="tblMessageMedia" EntitySet="tblMessageMedia" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NotifyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblDepartment">
+          <Key>
+            <PropertyRef Name="tblDepartmentID" />
+          </Key>
+          <Property Name="tblDepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LabelColor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Initial" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tblMessages" Relationship="Self.FK_tblMessage_tblDepartment" FromRole="tblDepartment" ToRole="tblMessage" />
+        </EntityType>
+        <EntityType Name="tblEmployee">
+          <Key>
+            <PropertyRef Name="tblEmployeeID" />
+          </Key>
+          <Property Name="tblEmployeeID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tblEmployeeMessages" Relationship="Self.FK_tblEmployeeMessage_tblEmployee" FromRole="tblEmployee" ToRole="tblEmployeeMessage" />
+        </EntityType>
+        <EntityType Name="tblEmployeeMessage">
+          <Key>
+            <PropertyRef Name="tblMessageID" />
+            <PropertyRef Name="tblEmployeeID" />
+          </Key>
+          <Property Name="tblMessageID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tblEmployeeID" Type="Int64" Nullable="false" />
+          <Property Name="IsRead" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tblEmployee" Relationship="Self.FK_tblEmployeeMessage_tblEmployee" FromRole="tblEmployeeMessage" ToRole="tblEmployee" />
+          <NavigationProperty Name="tblMessage" Relationship="Self.FK_tblEmployeeMessage_tblMessage" FromRole="tblEmployeeMessage" ToRole="tblMessage" />
+        </EntityType>
+        <EntityType Name="tblMessage">
+          <Key>
+            <PropertyRef Name="tblMessageID" />
+          </Key>
+          <Property Name="tblMessageID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Subject" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="tblDepartmentID" Type="Int32" Nullable="false" />
+          <Property Name="tblPriorityID" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tblDepartment" Relationship="Self.FK_tblMessage_tblDepartment" FromRole="tblMessage" ToRole="tblDepartment" />
+          <NavigationProperty Name="tblEmployeeMessages" Relationship="Self.FK_tblEmployeeMessage_tblMessage" FromRole="tblMessage" ToRole="tblEmployeeMessage" />
+          <NavigationProperty Name="tblPriority" Relationship="Self.FK_tblMessage_tblPriority" FromRole="tblMessage" ToRole="tblPriority" />
+          <NavigationProperty Name="tblMessageMedias" Relationship="Self.FK_tblMessageMedia_tblMessage" FromRole="tblMessage" ToRole="tblMessageMedia" />
+        </EntityType>
+        <EntityType Name="tblMessageMedia">
+          <Key>
+            <PropertyRef Name="tblMessageMediaID" />
+          </Key>
+          <Property Name="tblMessageMediaID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tblMessageID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Path" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tblMediaType" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblMessage" Relationship="Self.FK_tblMessageMedia_tblMessage" FromRole="tblMessageMedia" ToRole="tblMessage" />
+        </EntityType>
+        <EntityType Name="tblPriority">
+          <Key>
+            <PropertyRef Name="tblPriorityID" />
+          </Key>
+          <Property Name="tblPriorityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tblMessages" Relationship="Self.FK_tblMessage_tblPriority" FromRole="tblPriority" ToRole="tblMessage" />
+        </EntityType>
+        <Association Name="FK_tblMessage_tblDepartment">
+          <End Role="tblDepartment" Type="Self.tblDepartment" Multiplicity="1" />
+          <End Role="tblMessage" Type="Self.tblMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDepartment">
+              <PropertyRef Name="tblDepartmentID" />
+            </Principal>
+            <Dependent Role="tblMessage">
+              <PropertyRef Name="tblDepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblEmployeeMessage_tblEmployee">
+          <End Role="tblEmployee" Type="Self.tblEmployee" Multiplicity="1" />
+          <End Role="tblEmployeeMessage" Type="Self.tblEmployeeMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmployee">
+              <PropertyRef Name="tblEmployeeID" />
+            </Principal>
+            <Dependent Role="tblEmployeeMessage">
+              <PropertyRef Name="tblEmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblEmployeeMessage_tblMessage">
+          <End Role="tblMessage" Type="Self.tblMessage" Multiplicity="1" />
+          <End Role="tblEmployeeMessage" Type="Self.tblEmployeeMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMessage">
+              <PropertyRef Name="tblMessageID" />
+            </Principal>
+            <Dependent Role="tblEmployeeMessage">
+              <PropertyRef Name="tblMessageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMessage_tblPriority">
+          <End Role="tblPriority" Type="Self.tblPriority" Multiplicity="1" />
+          <End Role="tblMessage" Type="Self.tblMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPriority">
+              <PropertyRef Name="tblPriorityID" />
+            </Principal>
+            <Dependent Role="tblMessage">
+              <PropertyRef Name="tblPriorityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMessageMedia_tblMessage">
+          <End Role="tblMessage" Type="Self.tblMessage" Multiplicity="1" />
+          <End Role="tblMessageMedia" Type="Self.tblMessageMedia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMessage">
+              <PropertyRef Name="tblMessageID" />
+            </Principal>
+            <Dependent Role="tblMessageMedia">
+              <PropertyRef Name="tblMessageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NotifyEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblDepartments" EntityType="Self.tblDepartment" />
+          <EntitySet Name="tblEmployees" EntityType="Self.tblEmployee" />
+          <EntitySet Name="tblEmployeeMessages" EntityType="Self.tblEmployeeMessage" />
+          <EntitySet Name="tblMessages" EntityType="Self.tblMessage" />
+          <EntitySet Name="tblMessageMedias" EntityType="Self.tblMessageMedia" />
+          <EntitySet Name="tblPriorities" EntityType="Self.tblPriority" />
+          <AssociationSet Name="FK_tblMessage_tblDepartment" Association="Self.FK_tblMessage_tblDepartment">
+            <End Role="tblDepartment" EntitySet="tblDepartments" />
+            <End Role="tblMessage" EntitySet="tblMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblEmployeeMessage_tblEmployee" Association="Self.FK_tblEmployeeMessage_tblEmployee">
+            <End Role="tblEmployee" EntitySet="tblEmployees" />
+            <End Role="tblEmployeeMessage" EntitySet="tblEmployeeMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblEmployeeMessage_tblMessage" Association="Self.FK_tblEmployeeMessage_tblMessage">
+            <End Role="tblMessage" EntitySet="tblMessages" />
+            <End Role="tblEmployeeMessage" EntitySet="tblEmployeeMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMessage_tblPriority" Association="Self.FK_tblMessage_tblPriority">
+            <End Role="tblPriority" EntitySet="tblPriorities" />
+            <End Role="tblMessage" EntitySet="tblMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMessageMedia_tblMessage" Association="Self.FK_tblMessageMedia_tblMessage">
+            <End Role="tblMessage" EntitySet="tblMessages" />
+            <End Role="tblMessageMedia" EntitySet="tblMessageMedias" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="NotifyModelStoreContainer" CdmEntityContainer="NotifyEntities">
+          <EntitySetMapping Name="tblDepartments">
+            <EntityTypeMapping TypeName="NotifyModel.tblDepartment">
+              <MappingFragment StoreEntitySet="tblDepartment">
+                <ScalarProperty Name="tblDepartmentID" ColumnName="tblDepartmentID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LabelColor" ColumnName="LabelColor" />
+                <ScalarProperty Name="Initial" ColumnName="Initial" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblEmployees">
+            <EntityTypeMapping TypeName="NotifyModel.tblEmployee">
+              <MappingFragment StoreEntitySet="tblEmployee">
+                <ScalarProperty Name="tblEmployeeID" ColumnName="tblEmployeeID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblEmployeeMessages">
+            <EntityTypeMapping TypeName="NotifyModel.tblEmployeeMessage">
+              <MappingFragment StoreEntitySet="tblEmployeeMessage">
+                <ScalarProperty Name="tblMessageID" ColumnName="tblMessageID" />
+                <ScalarProperty Name="tblEmployeeID" ColumnName="tblEmployeeID" />
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblMessages">
+            <EntityTypeMapping TypeName="NotifyModel.tblMessage">
+              <MappingFragment StoreEntitySet="tblMessage">
+                <ScalarProperty Name="tblMessageID" ColumnName="tblMessageID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="ModifiedAt" ColumnName="ModifiedAt" />
+                <ScalarProperty Name="tblDepartmentID" ColumnName="tblDepartmentID" />
+                <ScalarProperty Name="tblPriorityID" ColumnName="tblPriorityID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblMessageMedias">
+            <EntityTypeMapping TypeName="NotifyModel.tblMessageMedia">
+              <MappingFragment StoreEntitySet="tblMessageMedia">
+                <ScalarProperty Name="tblMessageMediaID" ColumnName="tblMessageMediaID" />
+                <ScalarProperty Name="tblMessageID" ColumnName="tblMessageID" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="tblMediaType" ColumnName="tblMediaType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPriorities">
+            <EntityTypeMapping TypeName="NotifyModel.tblPriority">
+              <MappingFragment StoreEntitySet="tblPriority">
+                <ScalarProperty Name="tblPriorityID" ColumnName="tblPriorityID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
